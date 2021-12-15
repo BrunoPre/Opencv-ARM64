@@ -33,6 +33,9 @@ source /etc/environment
 
 ############################# Downloading Packages #########################################
 
+#*********************** gStreamer *********************************************************
+apt-get install -y libgstreamer1.0-dev libgstreamer-plugins-base1.0-dev gstreamer1.0-tools ubuntu-restricted-extras >> $logfile 2>&1
+
 #*********************** FFMPEG ************************************************************
 echo "[Info] Downloading FFMPEG"
 cd /opt/ATLAS
@@ -63,12 +66,12 @@ mv v4l-utils-1.18.0 v4l-utils
 #*********************** OpenCV ************************************************************
 echo "[Info] Downloading OpenCV"
 cd /opt/ATLAS
-wget --no-check-certificate https://github.com/opencv/opencv/archive/3.4.1.zip -O opencv-3.4.1.zip >> $logfile 2>&1
-wget --no-check-certificate https://github.com/opencv/opencv_contrib/archive/3.4.1.zip -O opencv_contrib-3.4.1.zip >> $logfile 2>&1
-unzip opencv-3.4.1.zip  >> $logfile 2>&1
-unzip opencv_contrib-3.4.1.zip >> $logfile 2>&1
-mv opencv-3.4.1 OpenCV
-mv opencv_contrib-3.4.1 OpenCV/
+wget --no-check-certificate https://github.com/opencv/opencv/archive/4.5.3.zip -O opencv-4.5.3.zip >> $logfile 2>&1
+wget --no-check-certificate https://github.com/opencv/opencv_contrib/archive/4.5.3.zip -O opencv_contrib-4.5.3.zip >> $logfile 2>&1
+unzip opencv-4.5.3.zip  >> $logfile 2>&1
+unzip opencv_contrib-4.5.3.zip >> $logfile 2>&1
+mv opencv-4.5.3 OpenCV
+mv opencv_contrib-4.5.3 OpenCV/
 
 #*******************************************************************************************
 
@@ -131,7 +134,7 @@ cp -rf $ARMPREFIX/etc /usr/aarch64-linux-gnu/
 echo "[Info] Compiling OpenCV"
 mkdir /opt/ATLAS/OpenCV/build
 cd /opt/ATLAS/OpenCV/build
-cmake -D CMAKE_C_COMPILER=/usr/bin/aarch64-linux-gnu-gcc \
+cmake 	-D CMAKE_C_COMPILER=/usr/bin/aarch64-linux-gnu-gcc \
 	-D CMAKE_CXX_COMPILER=/usr/bin/aarch64-linux-gnu-g++ \
 	-D CMAKE_BUILD_TYPE=RELEASE \
 	-D OPENCV_EXTRA_MODULES_PATH=../opencv_contrib-3.4.1/modules \
@@ -146,15 +149,23 @@ cmake -D CMAKE_C_COMPILER=/usr/bin/aarch64-linux-gnu-gcc \
 	-D BUILD_TBB=ON \
 	-D WITH_EIGEN=OFF \
 	-D WITH_VTK=OFF \
-	-D WITH_LIBV4L=ON \
-	-D WITH_V4L=ON \
+	-D WITH_GSTREAMER=ON \
+	-D BUILD_LIBV4L=ON \
 	-D WITH_FFMPEG=ON \
 	-D BUILD_TESTS=OFF \
 	-D BUILD_PERF_TESTS=OFF \
 	-D CMAKE_BUILD_TYPE=RELEASE \
 	-D CMAKE_INSTALL_PREFIX=${ARMPREFIX} \
 	-D CMAKE_MAKE_PROGRAM=/usr/bin/make \
-	-D CMAKE_TOOLCHAIN_FILE=../platforms/linux/aarch64-gnu.toolchain.cmake .. >> $logfile 2>&1
+    -D CMAKE_TOOLCHAIN_FILE=../platforms/linux/aarch64-gnu.toolchain.cmake \
+    -D PYTHON2_INCLUDE_PATH=/usr/include/python2.7 \
+    -D PYTHON2_LIBRARIES=/usr/lib/aarch64-linux-gnu/libpython2.7.so \
+    -D PYTHON2_NUMPY_INCLUDE_DIRS=/usr/lib/python2/dist-packages/numpy/core/include \
+    -D PYTHON3_INCLUDE_PATH=/usr/include/python3.7m \
+    -D PYTHON3_LIBRARIES=/usr/lib/aarch64-linux-gnu/libpython3.7m.so \
+    -D PYTHON3_NUMPY_INCLUDE_DIRS=/usr/lib/python3/dist-packages/numpy/core/include \
+    -D BUILD_OPENCV_PYTHON2=ON \
+    -D BUILD_OPENCV_PYTHON3=ON  .. >> $logfile 2>&1
 make -j$num_proc  >> $logfile 2>&1
 make install >> $logfile 2>&1
 #*******************************************************************************************
