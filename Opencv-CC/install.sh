@@ -11,6 +11,8 @@ echo "[Info] Preparing Environment"
 apt-get update >> $logfile 2>&1
 apt-get install -y wget git bzip2 unzip vim cmake >> $logfile 2>&1
 apt-get install -y gcc-aarch64-linux-gnu g++-aarch64-linux-gnu pkg-config-aarch64-linux-gnu >> $logfile 2>&1
+apt-get install -y python3-dev python3-numpy python-dev python-numpy >> $logfile 2>&1
+
  
 #*******************************************************************************************
 
