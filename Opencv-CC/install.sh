@@ -34,6 +34,7 @@ source /etc/environment
 ############################# Downloading Packages #########################################
 
 #*********************** gStreamer *********************************************************
+echo "[Info] Downloading & Installing gStreamer"
 apt-get install -y libgstreamer1.0-dev libgstreamer-plugins-base1.0-dev gstreamer1.0-tools ubuntu-restricted-extras >> $logfile 2>&1
 
 #*********************** FFMPEG ************************************************************
