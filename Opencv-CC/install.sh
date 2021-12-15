@@ -140,7 +140,7 @@ cd /opt/ATLAS/OpenCV/build
 cmake 	-D CMAKE_C_COMPILER=/usr/bin/aarch64-linux-gnu-gcc \
 	-D CMAKE_CXX_COMPILER=/usr/bin/aarch64-linux-gnu-g++ \
 	-D CMAKE_BUILD_TYPE=RELEASE \
-	-D OPENCV_EXTRA_MODULES_PATH=../opencv_contrib-3.4.1/modules \
+	-D OPENCV_EXTRA_MODULES_PATH=../opencv_contrib-4.5.3/modules \
 	-D BUILD_NEW_PYTHON_SUPPORT=ON \
 	-D BUILD_TIFF=ON \
 	-D WITH_CUDA=OFF \
